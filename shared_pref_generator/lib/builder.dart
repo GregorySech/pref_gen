@@ -13,22 +13,13 @@ Builder sharedPreferencesGenerator(BuilderOptions options) {
 class SharedPreferenecesGenerator extends GeneratorForAnnotation<PreferencesHolder> {
   @override
   FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) {
-<<<<<<< HEAD
-    print("AAA");
+
     if(element is ClassElement) {
-      var fieldImpls = element.fields.map(
-        (field) {
-          return "// ${field.name} ${field.type}";
-=======
-    if(element is ClassElement) {
-      
       var fieldImpls = element.fields.map(
         (field) {
           return "//" + field.name;
->>>>>>> ba3205de7206fdf349b8eb03d430efa8cfffc9d7
         }
       );
-
       return fieldImpls.join('\n');
     }
     print(element.name);
