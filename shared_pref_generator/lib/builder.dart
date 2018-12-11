@@ -20,12 +20,21 @@ class SharedPreferenecesGenerator
       var methods = List<Method>();
 
       element.fields.forEach((field) {
-        methods.add(_generateGetter(field));
-        methods.add(_generateSetter(field));
+        methods.addAll([
+          _generateAsyncGetter(field),
+          _generateAsyncSetter(field),
+          _generateSetter(field),
+          _generateGetter(field)]);
       });
 
       final generatedClass = Class(
         (b) => b
+          ..fields.add(Field((b) => b
+            ..name = '_cache'
+            ..type = refer('Map<String, dynamic>')
+            ..modifier = FieldModifier.var$
+            ..assignment = Code('Map<String, dynamic>()')
+          ))
           ..fields.add(Field((b) => b
             ..name = '_adapter'
             ..modifier = FieldModifier.var$
@@ -53,28 +62,29 @@ class SharedPreferenecesGenerator
   }
 
   Method _generateSetter(FieldElement field) {
-    Code code;
+    String code;
     switch (field.type.displayName) {
       case 'bool':
-        code = Code('_adapter.setBool("${field.name}", value);');
+        code = '_adapter.setBool("${field.name}", value);';
         break;
       case 'int':
-        code = Code('_adapter.setInt("${field.name}", value);');
+        code = '_adapter.setInt("${field.name}", value);';
         break;
       case 'String':
-        code = Code('_adapter.setString("${field.name}", value);');
+        code = '_adapter.setString("${field.name}", value);';
         break;
       case 'List<String>':
-        code = Code('_adapter.setStringList("${field.name}", value);');
+        code = '_adapter.setStringList("${field.name}", value);';
         break;
       case 'double':
-        code = Code('_adapter.setDouble("${field.name}", value);');
+        code = '_adapter.setDouble("${field.name}", value);';
         break;
     }
 
+    code += '\n _cache["${field.name}"] = value;';
     return Method((b) => b
       ..name = field.name
-      ..body = code
+      ..body = Code(code)
       ..requiredParameters.add(Parameter((b) => b
         ..name = 'value'
         ..type = refer(field.type.displayName)))
@@ -85,19 +95,19 @@ class SharedPreferenecesGenerator
     Code code;
     switch (field.type.displayName) {
       case 'bool':
-        code = Code('return false;');
+        code = Code('return _cache["${field.name}"] as bool;');
         break;
       case 'int':
-        code = Code('return 0;');
+        code = Code('return _cache["${field.name}"] as int;');
         break;
       case 'String':
-        code = Code('return "ddd";');
+        code = Code('return _cache["${field.name}"] as String;');
         break;
       case 'List<String>':
-        code = Code('return [];');
+        code = Code('return List<String>.from(_cache["${field.name}"] as List);');
         break;
       case 'double':
-        code = Code('return 0;');
+        code = Code('return _cache["${field.name}"] as double;');
         break;
     }
 
@@ -107,5 +117,61 @@ class SharedPreferenecesGenerator
       ..returns = refer(field.type.displayName)
       ..type = MethodType.getter);
   }
-  
+
+  Method _generateAsyncGetter(FieldElement field) {
+    Code code;
+    switch (field.type.displayName) {
+      case 'bool':
+        code = Code('return _adapter.getBool("${field.name}");');
+        break;
+      case 'int':
+        code = Code('return _adapter.getInt("${field.name}");');
+        break;
+      case 'String':
+        code = Code('return _adapter.getString("${field.name}");');
+        break;
+      case 'List<String>':
+        code = Code('return _adapter.getStringList("${field.name}");');
+        break;
+      case 'double':
+        code = Code('return _adapter.getDouble("${field.name}");');
+        break;
+    }
+
+    return Method((b) => b
+      ..name = "${field.name}Async"
+      ..body = code     
+      ..returns = refer("Future<${field.type.displayName}>")
+    );
+  }
+
+  Method _generateAsyncSetter(FieldElement field) {
+    String code = '_cache["${field.name}"] = value; \n';
+    switch (field.type.displayName) {
+      case 'bool':
+        code += 'return _adapter.setBool("${field.name}", value);';
+        break;
+      case 'int':
+        code += 'return _adapter.setInt("${field.name}", value);';
+        break;
+      case 'String':
+        code += 'return _adapter.setString("${field.name}", value);';
+        break;
+      case 'List<String>':
+        code += 'return _adapter.setStringList("${field.name}", value);';
+        break;
+      case 'double':
+        code += 'return _adapter.setDouble("${field.name}", value);';
+        break;
+    }
+
+    return Method((b) => b
+      ..name = "${field.name}AsyncSet"
+      ..body = Code(code)
+      ..requiredParameters.add(Parameter((b) => b
+        ..name = 'value'
+        ..type = refer(field.type.displayName))) 
+      ..returns = refer("Future<void>")
+    );
+  }
 }
