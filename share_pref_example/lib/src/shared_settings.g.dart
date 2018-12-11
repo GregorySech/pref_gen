@@ -6,4 +6,5 @@ part of 'shared_settings.dart';
 // SharedPreferenecesGenerator
 // **************************************************************************
 
-// ANNOTATION FOUND
+//ddd
+//kkk

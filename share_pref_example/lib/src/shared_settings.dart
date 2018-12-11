@@ -3,5 +3,6 @@ part 'shared_settings.g.dart';
 
 @PreferencesHolder("settings")
 class SharedSettings {
-
+  String ddd;
+  String kkk;
 }
