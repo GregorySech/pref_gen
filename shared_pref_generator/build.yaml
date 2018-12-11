@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      shared_pref_generator|shared_pref_annotation:
+        enabled: true
+
+builders:
+  todo_reporter:
+    target: ":shared_pref_generator"
+    import: "package:shared_pref_generator/builder.dart"
+    builder_factories: ["sharedPreferencesGenerator"]
+    build_extensions: {".dart": [".shared_preferences_generator.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
