@@ -2,7 +2,12 @@ import 'package:shared_pref_annotation/shared_pref_annotation.dart';
 part 'shared_settings.g.dart';
 
 @PreferencesHolder("settings")
-class SharedSettings {
+abstract class SharedSettings {
   String ddd;
-  String kkk;
+  int kkk;
+  bool ccc;
+  double eee;
+  List<String> ooo;
+
+  factory SharedSettings(PreferenceAdapter adapter) = _$SharedSettings;
 }

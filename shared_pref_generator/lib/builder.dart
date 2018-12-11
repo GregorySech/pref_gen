@@ -20,15 +20,8 @@ class SharedPreferenecesGenerator
       var methods = List<Method>();
 
       element.fields.forEach((field) {
-        methods.add(Method((b) => b
-          ..name = field.name
-          ..type = MethodType.setter
-          ..body = Code('this._adapter.setBool("ddd", true);')));
-
-        methods.add(Method((b) => b
-          ..name = field.name
-          ..type = MethodType.getter
-          ..body = Code('return true;')));
+        methods.add(_generateGetter(field));
+        methods.add(_generateSetter(field));
       });
 
       final generatedClass = Class(
@@ -38,7 +31,7 @@ class SharedPreferenecesGenerator
             ..modifier = FieldModifier.var$
             ..type = refer('PreferenceAdapter')))
           ..name = "_\$${element.name}"
-          ..extend = refer(element.name)
+          ..implements.add(refer(element.name))
           ..constructors.add(
             Constructor(
               (b) => b
@@ -56,7 +49,63 @@ class SharedPreferenecesGenerator
       final emitter = DartEmitter();
       return (DartFormatter().format('${generatedClass.accept(emitter)}'));
     }
-    print(element.name);
     return "// ANNOTATION FOUND";
   }
+
+  Method _generateSetter(FieldElement field) {
+    Code code;
+    switch (field.type.displayName) {
+      case 'bool':
+        code = Code('_adapter.setBool("${field.name}", value);');
+        break;
+      case 'int':
+        code = Code('_adapter.setInt("${field.name}", value);');
+        break;
+      case 'String':
+        code = Code('_adapter.setString("${field.name}", value);');
+        break;
+      case 'List<String>':
+        code = Code('_adapter.setStringList("${field.name}", value);');
+        break;
+      case 'double':
+        code = Code('_adapter.setDouble("${field.name}", value);');
+        break;
+    }
+
+    return Method((b) => b
+      ..name = field.name
+      ..body = code
+      ..requiredParameters.add(Parameter((b) => b
+        ..name = 'value'
+        ..type = refer(field.type.displayName)))
+      ..type = MethodType.setter);
+  }
+
+  Method _generateGetter(FieldElement field) {
+    Code code;
+    switch (field.type.displayName) {
+      case 'bool':
+        code = Code('return false;');
+        break;
+      case 'int':
+        code = Code('return 0;');
+        break;
+      case 'String':
+        code = Code('return "ddd";');
+        break;
+      case 'List<String>':
+        code = Code('return [];');
+        break;
+      case 'double':
+        code = Code('return 0;');
+        break;
+    }
+
+    return Method((b) => b
+      ..name = field.name
+      ..body = code
+      ..returns = refer(field.type.displayName)
+      ..type = MethodType.getter);
+  }
+  
 }

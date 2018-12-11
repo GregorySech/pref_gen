@@ -6,26 +6,57 @@ part of 'shared_settings.dart';
 // SharedPreferenecesGenerator
 // **************************************************************************
 
-class _$SharedSettings extends SharedSettings {
+class _$SharedSettings implements SharedSettings {
   _$SharedSettings(PreferenceAdapter adapter) {
     this._adapter = adapter;
   }
 
   PreferenceAdapter _adapter;
 
-  set ddd() {
-    this._adapter.setBool("ddd", true);
+  String get ddd {
+    return "ddd";
   }
 
-  get ddd {
-    return true;
+  set ddd(String value) {
+    _adapter.setString("ddd", value);
   }
 
-  set kkk() {
-    this._adapter.setBool("ddd", true);
+  int get kkk {
+    return 0;
   }
 
-  get kkk {
-    return true;
+  set kkk(int value) {
+    _adapter.setInt("kkk", value);
+  }
+
+  bool get ccc {
+    return false;
+  }
+
+  Future<void> fetchCache() {
+  }
+
+  Future<bool> cccAsync() {
+    return _adapter.getBool("ccc");
+  }
+
+  set ccc(bool value) {
+    _adapter.setBool("ccc", value);
+  }
+
+  double get eee {
+    return 0;
+  }
+
+  set eee(double value) {
+    _adapter.setDouble("eee", value);
+  }
+
+  List<String> get ooo {
+    return [];
+  }
+
+  set ooo(List<String> value) {
+    _adapter.setStringList("ooo", value);
   }
 }
