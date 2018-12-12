@@ -1,4 +1,7 @@
 class PreferencesHolder {
-  final String key;
-  const PreferencesHolder(this.key);
+  const PreferencesHolder();
+}
+
+class ReactivePreferencesHolder {
+  const ReactivePreferencesHolder();
 }
