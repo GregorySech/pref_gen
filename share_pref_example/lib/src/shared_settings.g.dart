@@ -3,103 +3,81 @@
 part of 'shared_settings.dart';
 
 // **************************************************************************
-// SharedPreferenecesGenerator
+// ReactiveSharedPreferencesGenerator
 // **************************************************************************
 
 class _$SharedSettings implements SharedSettings {
-  _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter;
-
-  final Map<String, dynamic> _cache = Map<String, dynamic>();
+  _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter {
+    dddSink = (StreamController<String>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setString("ddd", value);
+            _dddSubject.add(value);
+          }))
+        .sink;
+    kkkSink = (StreamController<int>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setInt("kkk", value);
+            _kkkSubject.add(value);
+          }))
+        .sink;
+    cccSink = (StreamController<bool>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setBool("ccc", value);
+            _cccSubject.add(value);
+          }))
+        .sink;
+    eeeSink = (StreamController<double>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setDouble("eee", value);
+            _eeeSubject.add(value);
+          }))
+        .sink;
+    oooSink = (StreamController<List<String>>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setStringList("ooo", value);
+            _oooSubject.add(value);
+          }))
+        .sink;
+    _adapter.getString("ddd").then(dddSink.add);
+    _adapter.getInt("kkk").then(kkkSink.add);
+    _adapter.getBool("ccc").then(cccSink.add);
+    _adapter.getDouble("eee").then(eeeSink.add);
+    _adapter.getStringList("ooo").then(oooSink.add);
+  }
 
   final PreferenceAdapter _adapter;
 
-  Future<String> dddAsync() {
-    return _adapter.getString("ddd");
-  }
+  final BehaviorSubject<String> _dddSubject = BehaviorSubject<String>();
 
-  Future<int> kkkAsync() {
-    return _adapter.getInt("kkk");
-  }
+  final BehaviorSubject<int> _kkkSubject = BehaviorSubject<int>();
 
-  Future<bool> cccAsync() {
-    return _adapter.getBool("ccc");
-  }
+  final BehaviorSubject<bool> _cccSubject = BehaviorSubject<bool>();
 
-  Future<double> eeeAsync() {
-    return _adapter.getDouble("eee");
-  }
+  final BehaviorSubject<double> _eeeSubject = BehaviorSubject<double>();
 
-  Future<List<String>> oooAsync() {
-    return _adapter.getStringList("ooo");
-  }
+  final BehaviorSubject<List<String>> _oooSubject =
+      BehaviorSubject<List<String>>();
 
-  Future<void> dddAsyncSet(String value) {
-    _cache["ddd"] = value;
-    return _adapter.setString("ddd", value);
-  }
+  Sink<String> dddSink;
 
-  Future<void> kkkAsyncSet(int value) {
-    _cache["kkk"] = value;
-    return _adapter.setInt("kkk", value);
-  }
+  Sink<int> kkkSink;
 
-  Future<void> cccAsyncSet(bool value) {
-    _cache["ccc"] = value;
-    return _adapter.setBool("ccc", value);
-  }
+  Sink<bool> cccSink;
 
-  Future<void> eeeAsyncSet(double value) {
-    _cache["eee"] = value;
-    return _adapter.setDouble("eee", value);
-  }
+  Sink<double> eeeSink;
 
-  Future<void> oooAsyncSet(List<String> value) {
-    _cache["ooo"] = value;
-    return _adapter.setStringList("ooo", value);
-  }
+  Sink<List<String>> oooSink;
 
-  set ddd(String value) {
-    _adapter.setString("ddd", value);
-    _cache["ddd"] = value;
-  }
-
-  set kkk(int value) {
-    _adapter.setInt("kkk", value);
-    _cache["kkk"] = value;
-  }
-
-  set ccc(bool value) {
-    _adapter.setBool("ccc", value);
-    _cache["ccc"] = value;
-  }
-
-  set eee(double value) {
-    _adapter.setDouble("eee", value);
-    _cache["eee"] = value;
-  }
-
-  set ooo(List<String> value) {
-    _adapter.setStringList("ooo", value);
-    _cache["ooo"] = value;
-  }
-
-  String get ddd {
-    return _cache["ddd"] as String;
-  }
-
-  int get kkk {
-    return _cache["kkk"] as int;
-  }
-
-  bool get ccc {
-    return _cache["ccc"] as bool;
-  }
-
-  double get eee {
-    return _cache["eee"] as double;
-  }
-
-  List<String> get ooo {
-    return List<String>.from(_cache["ooo"] as List);
+  Stream<String> get dddStream => _dddSubject.asBroadcastStream();
+  Stream<int> get kkkStream => _kkkSubject.asBroadcastStream();
+  Stream<bool> get cccStream => _cccSubject.asBroadcastStream();
+  Stream<double> get eeeStream => _eeeSubject.asBroadcastStream();
+  Stream<List<String>> get oooStream => _oooSubject.asBroadcastStream();
+  void dispose() {
+    dddSink.close();
+    kkkSink.close();
+    cccSink.close();
+    eeeSink.close();
+    oooSink.close();
   }
 }

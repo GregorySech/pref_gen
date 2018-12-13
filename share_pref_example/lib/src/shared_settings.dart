@@ -1,8 +1,11 @@
 import 'package:shared_pref_annotation/shared_pref_annotation.dart';
+import 'package:rxdart/rxdart.dart';
+import 'dart:async';
 part 'shared_settings.g.dart';
 
-@PreferencesHolder()
+@ReactivePreferencesHolder()
 abstract class SharedSettings {
+
   String ddd;
   int kkk;
   bool ccc;
