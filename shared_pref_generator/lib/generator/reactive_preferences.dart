@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:shared_pref_annotation/shared_pref_annotation.dart';
 import 'package:source_gen/source_gen.dart';
@@ -44,6 +45,8 @@ class ReactiveSharedPreferencesGenerator
                 .addAll(element.fields.map<Field>(_generateBehaviourSubject))
             ..fields.addAll(element.fields.map<Field>(_generateSink))
             ..methods.addAll(element.fields.map(_generateStreamGetter))
+            ..methods.addAll(element.fields.map(_generateFieldGetter))
+            ..methods.addAll(element.fields.map(_generateFieldSetter))
             ..methods.add(Method.returnsVoid((m) => m
               ..name = 'dispose'
               ..body = Block.of(element.fields
@@ -56,6 +59,24 @@ class ReactiveSharedPreferencesGenerator
     return "// Annotation found but it's not annotating a class";
   }
 }
+
+Method _generateFieldGetter(FieldElement element) => Method((b) => b
+  ..name = element.name
+  ..returns = refer(element.type.displayName)
+  ..type = MethodType.getter
+  ..lambda = true
+  ..body = Code('_${element.name}Subject.value'));
+
+Method _generateFieldSetter(FieldElement element) => Method((b) => b
+  ..name = element.name
+  ..type = MethodType.setter
+  ..lambda = true
+  ..requiredParameters = ListBuilder<Parameter>([
+    Parameter((pb) => pb
+      ..name = 'value'
+      ..type = refer(element.type.displayName))
+  ])
+  ..body = Code('${element.name}Sink.add(value)'));
 
 Method _generateStreamGetter(FieldElement element) => Method((b) => b
   ..name = '${element.name}Stream'
