@@ -81,32 +81,31 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildPickerDialogAction(BuildContext context) {
-    new IconButton(
-        icon: new Icon(Icons.colorize),
-        tooltip: 'Change appbar color',
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                      title: const Text('Pick a color!'),
-                      content: SingleChildScrollView(
-                        child: ColorPicker(
-                          pickerColor: pickerColor,
-                          onColorChanged: (color) =>
-                              settings.appbarColor = color.value,
-                          enableLabel: true,
-                          pickerAreaHeightPercent: 0.8,
-                        ),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('Got it'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ]));
-        });
-  }
+  Widget _buildPickerDialogAction(BuildContext context) => IconButton(
+      icon: new Icon(Icons.colorize),
+      tooltip: 'Change appbar color',
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                  title: const Text('Pick a color!'),
+                  content: SingleChildScrollView(
+                    child: ColorPicker(
+                      pickerColor: pickerColor,
+                      onColorChanged: (color) =>
+                          settings.appbarColor = color.value,
+                      enableLabel: true,
+                      pickerAreaHeightPercent: 0.8,
+                    ),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Got it'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ]),
+        );
+      });
 }
