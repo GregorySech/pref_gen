@@ -1,7 +1,2 @@
 library shared_pref_generator;
-
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'generator/generator.dart';
