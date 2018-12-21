@@ -18,6 +18,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.1.2
+  flutter_colorpicker: ^0.1.0
   athos:
     path: ../athos
   shared_pref_generator:
