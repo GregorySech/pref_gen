@@ -1,4 +1,4 @@
-# share_pref_example
+# Example
 
 A new Flutter project.
 
