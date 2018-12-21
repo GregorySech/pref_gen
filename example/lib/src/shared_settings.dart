@@ -4,7 +4,7 @@ import 'dart:async';
 part 'shared_settings.g.dart';
 
 @ReactivePreferencesHolder()
-abstract class SharedSettings implements SharedSettingsPrefences {
+abstract class SharedSettings implements SharedSettingsPreferences {
   String name;
   String surname;
   int age;

@@ -74,6 +74,16 @@ class _$SharedSettings implements SharedSettings {
   Stream<bool> get heightStream => _heightSubject.asBroadcastStream();
   Stream<List<String>> get favoriteFoodsStream =>
       _favoriteFoodsSubject.asBroadcastStream();
+  String get name => _nameSubject.value;
+  String get surname => _surnameSubject.value;
+  int get age => _ageSubject.value;
+  bool get height => _heightSubject.value;
+  List<String> get favoriteFoods => _favoriteFoodsSubject.value;
+  set name(String value) => nameSink.add(value);
+  set surname(String value) => surnameSink.add(value);
+  set age(int value) => ageSink.add(value);
+  set height(bool value) => heightSink.add(value);
+  set favoriteFoods(List<String> value) => favoriteFoodsSink.add(value);
   void dispose() {
     nameSink.close();
     surnameSink.close();

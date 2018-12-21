@@ -6,7 +6,7 @@ import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
 import 'package:shared_pref_annotation/shared_pref_annotation.dart';
 import 'package:source_gen/source_gen.dart';
-import 'package:shared_pref_generator/generator/generator.dart';
+import 'package:dart_agnan/generator/generator.dart';
 
 Builder sharedPreferencesGenerator(BuilderOptions options) {
   return SharedPartBuilder(

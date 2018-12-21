@@ -1,4 +1,4 @@
-# shared_pref_generator
+# dart_agnan
 
 A new Flutter package.
 

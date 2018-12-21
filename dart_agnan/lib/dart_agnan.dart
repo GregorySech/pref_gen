@@ -1,2 +1,2 @@
-library shared_pref_generator;
+library dart_agnan;
 export 'generator/generator.dart';
