@@ -3,14 +3,14 @@ import 'package:rxdart/rxdart.dart';
 import 'dart:async';
 part 'shared_settings.g.dart';
 
-@ReactivePreferencesHolder()
-abstract class SharedSettings {
+@PreferencesHolder()
+abstract class SharedSettings implements SharedSettingsPrefences {
+  String name;
+  String surname;
+  int age;
+  bool height;
+  List<String> favoriteFoods;
 
-  String ddd;
-  int kkk;
-  bool ccc;
-  double eee;
-  List<String> ooo;
 
   factory SharedSettings(PreferenceAdapter adapter) = _$SharedSettings;
 }
