@@ -50,7 +50,9 @@ class ReactiveSharedPreferencesGenerator
                   .map((field) => Code('${field.name}Sink.close();'))))))
           .build();
       final emitter = DartEmitter();
-      return (DartFormatter().format('${generatedClass.accept(emitter)}'));
+      return (DartFormatter().format('${generatedClass.accept(emitter)}') +
+          '\n' +
+          generateAbstractClass(element));
     }
 
     return "// Annotation found but it's not annotating a class";
@@ -76,4 +78,19 @@ Field _generateSink(FieldElement element) {
   return Field((b) => b
     ..name = '${element.name}Sink'
     ..type = refer('Sink<${element.type.displayName}>'));
+}
+
+String generateAbstractClass(ClassElement element) {
+  final generatedClass = ClassBuilder()
+    ..abstract = true
+    ..name = "${element.name}Preferences"
+    ..methods.addAll(element.fields.map((field) => Method((b) => b
+      ..name = '${field.name}Stream'
+      ..returns = refer('Stream<${field.type.displayName}>')
+      ..type = MethodType.getter)))
+    ..fields.addAll(element.fields.map((field) => Field((b) => b
+      ..name = '${field.name}Sink'
+      ..type = refer('Sink<${field.type.displayName}>'))));
+  final emitter = DartEmitter();
+  return (DartFormatter().format('${generatedClass.build().accept(emitter)}'));
 }

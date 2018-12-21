@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'dart:async';
 part 'shared_settings.g.dart';
 
-@PreferencesHolder()
+@ReactivePreferencesHolder()
 abstract class SharedSettings implements SharedSettingsPrefences {
   String name;
   String surname;
