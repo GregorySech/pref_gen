@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
 @ReactivePreferencesHolder()
 abstract class SharedSettings implements SharedSettingsPreferences {
   int counter;
+
   int appbarColor;
 
   factory SharedSettings(PreferenceAdapter adapter) = _$SharedSettings;

@@ -3,110 +3,59 @@
 part of 'shared_settings.dart';
 
 // **************************************************************************
-// ReactiveSharedPreferencesGenerator
+// SharedPreferenecesGenerator
 // **************************************************************************
 
 class _$SharedSettings implements SharedSettings {
   _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter {
-    nameSink = (StreamController<String>.broadcast()
-          ..stream.listen((value) async {
-            await adapter.setString("name", value);
-            _nameSubject.add(value);
-          }))
-        .sink;
-    surnameSink = (StreamController<String>.broadcast()
-          ..stream.listen((value) async {
-            await adapter.setString("surname", value);
-            _surnameSubject.add(value);
-          }))
-        .sink;
-    ageSink = (StreamController<int>.broadcast()
-          ..stream.listen((value) async {
-            await adapter.setInt("age", value);
-            _ageSubject.add(value);
-          }))
-        .sink;
-    heightSink = (StreamController<bool>.broadcast()
-          ..stream.listen((value) async {
-            await adapter.setBool("height", value);
-            _heightSubject.add(value);
-          }))
-        .sink;
-    favoriteFoodsSink = (StreamController<List<String>>.broadcast()
-          ..stream.listen((value) async {
-            await adapter.setStringList("favoriteFoods", value);
-            _favoriteFoodsSubject.add(value);
-          }))
-        .sink;
-    _adapter.getString("name").then(nameSink.add);
-    _adapter.getString("surname").then(surnameSink.add);
-    _adapter.getInt("age").then(ageSink.add);
-    _adapter.getBool("height").then(heightSink.add);
-    _adapter.getStringList("favoriteFoods").then(favoriteFoodsSink.add);
+    this._cache["name"] = 'asdasd';
+    this._cache["age"] = 'null';
   }
+
+  final Map<String, dynamic> _cache = Map<String, dynamic>();
 
   final PreferenceAdapter _adapter;
 
-  final BehaviorSubject<String> _nameSubject = BehaviorSubject<String>();
+  Future<String> nameAsync() {
+    return _adapter.getString("name");
+  }
 
-  final BehaviorSubject<String> _surnameSubject = BehaviorSubject<String>();
+  Future<int> ageAsync() {
+    return _adapter.getInt("age");
+  }
 
-  final BehaviorSubject<int> _ageSubject = BehaviorSubject<int>();
+  Future<void> nameAsyncSet(String value) {
+    _cache["name"] = value;
+    return _adapter.setString("name", value);
+  }
 
-  final BehaviorSubject<bool> _heightSubject = BehaviorSubject<bool>();
+  Future<void> ageAsyncSet(int value) {
+    _cache["age"] = value;
+    return _adapter.setInt("age", value);
+  }
 
-  final BehaviorSubject<List<String>> _favoriteFoodsSubject =
-      BehaviorSubject<List<String>>();
+  set name(String value) {
+    _adapter.setString("name", value);
+    _cache["name"] = value;
+  }
 
-  Sink<String> nameSink;
+  set age(int value) {
+    _adapter.setInt("age", value);
+    _cache["age"] = value;
+  }
 
-  Sink<String> surnameSink;
+  String get name {
+    return _cache["name"] as String;
+  }
 
-  Sink<int> ageSink;
-
-  Sink<bool> heightSink;
-
-  Sink<List<String>> favoriteFoodsSink;
-
-  Stream<String> get nameStream => _nameSubject.asBroadcastStream();
-  Stream<String> get surnameStream => _surnameSubject.asBroadcastStream();
-  Stream<int> get ageStream => _ageSubject.asBroadcastStream();
-  Stream<bool> get heightStream => _heightSubject.asBroadcastStream();
-  Stream<List<String>> get favoriteFoodsStream =>
-      _favoriteFoodsSubject.asBroadcastStream();
-  String get name => _nameSubject.value;
-  String get surname => _surnameSubject.value;
-  int get age => _ageSubject.value;
-  bool get height => _heightSubject.value;
-  List<String> get favoriteFoods => _favoriteFoodsSubject.value;
-  set name(String value) => nameSink.add(value);
-  set surname(String value) => surnameSink.add(value);
-  set age(int value) => ageSink.add(value);
-  set height(bool value) => heightSink.add(value);
-  set favoriteFoods(List<String> value) => favoriteFoodsSink.add(value);
-  void dispose() {
-    nameSink.close();
-    surnameSink.close();
-    ageSink.close();
-    heightSink.close();
-    favoriteFoodsSink.close();
+  int get age {
+    return _cache["age"] as int;
   }
 }
 
 abstract class SharedSettingsPreferences {
-  Sink<String> nameSink;
-
-  Sink<String> surnameSink;
-
-  Sink<int> ageSink;
-
-  Sink<bool> heightSink;
-
-  Sink<List<String>> favoriteFoodsSink;
-
-  Stream<String> get nameStream;
-  Stream<String> get surnameStream;
-  Stream<int> get ageStream;
-  Stream<bool> get heightStream;
-  Stream<List<String>> get favoriteFoodsStream;
+  Future<String> nameAsync();
+  Future<int> ageAsync();
+  Future<void> nameAsyncSet(String value);
+  Future<void> ageAsyncSet(int value);
 }

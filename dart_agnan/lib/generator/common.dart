@@ -3,41 +3,83 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
-import 'package:dart_style/dart_style.dart';
 import 'package:shared_pref_annotation/shared_pref_annotation.dart';
 import 'package:source_gen/source_gen.dart';
-import 'package:dart_agnan/generator/generator.dart';
+import 'package:analyzer/dart/constant/value.dart';
 
-ConstructorBuilder generateBasicConstructor(ConstructorBuilder builder) =>
-    builder
-      ..initializers.add(const Code('this._adapter = adapter'))
-      ..requiredParameters.add(
-        Parameter((b) => b
-          ..type = refer('PreferenceAdapter')
-          ..name = 'adapter'),
-      );
+final _defaultValueChecker = const TypeChecker.fromRuntime(DefaultValue);
 
+DartObject defaultValueAnnotation(FieldElement element) =>
+    _defaultValueChecker.firstAnnotationOfExact(element) ??
+    (element.getter == null
+        ? null
+        : _defaultValueChecker.firstAnnotationOfExact(element.getter));
+
+ConstructorBuilder generateBasicConstructor(
+    ConstructorBuilder builder, List<FieldElement> fields) {
+  var code = '';
+  code += fields.map((f) {
+    var annotation = defaultValueAnnotation(f);
+
+    if (annotation != null) {
+      var fieldCode =
+          "this._cache[\"${f.name}\"] = '${annotation.getField("value").toStringValue()}';";
+      return fieldCode;
+    }
+  }).join('\n');
+  return builder
+    ..initializers.add(Code("this._adapter = adapter"))
+      ..body = Code(code)
+    ..requiredParameters.add(
+      Parameter((b) => b
+        ..type = refer('PreferenceAdapter')
+        ..name = 'adapter'),
+    );
+}
+String getDefaultValue(FieldElement field, DartObject annotation) {
+  var value;
+  switch (field.type.displayName) {
+    case 'bool':
+      value = annotation.getField("value").toBoolValue().toString();
+      break;
+    case 'int':
+      value = annotation.getField("value").toIntValue().toString();
+      break;
+    case 'String':
+      value = "'" + annotation.getField("value").toStringValue() + "'";
+      break;
+    case 'List<String>':
+      value = annotation.getField("value").toListValue().toString();
+      break;
+    case 'double':
+      value = annotation.getField("value").toDoubleValue().toString();
+      break;
+  }
+  return value;
+}
 ClassBuilder generateClassBuilder(ClassElement element,
-        {Constructor injectedConstructor}) =>
-    ClassBuilder()
-      ..fields.add(Field((b) => b
-        ..name = '_cache'
-        ..type = refer('Map<String, dynamic>')
-        ..modifier = FieldModifier.final$
-        ..assignment = Code('Map<String, dynamic>()')))
-      ..fields.add(Field((b) => b
-        ..name = '_adapter'
-        ..modifier = FieldModifier.final$
-        ..type = refer('PreferenceAdapter')))
-      ..name = "_\$${element.name}"
-      ..implements.add(refer(element.name))
-      ..constructors.add(
-        injectedConstructor ?? Constructor(generateBasicConstructor),
-      )
-      ..methods.addAll(element.fields.map<Method>(generateAsyncGetter))
-      ..methods.addAll(element.fields.map<Method>(generateAsyncSetter))
-      ..methods.addAll(element.fields.map<Method>(generateSetter))
-      ..methods.addAll(element.fields.map<Method>(generateGetter));
+    {Constructor injectedConstructor}) {
+  return ClassBuilder()
+    ..fields.add(Field((b) => b
+      ..name = '_cache'
+      ..type = refer('Map<String, dynamic>')
+      ..modifier = FieldModifier.final$
+      ..assignment = Code('Map<String, dynamic>()')))
+    ..fields.add(Field((b) => b
+      ..name = '_adapter'
+      ..modifier = FieldModifier.final$
+      ..type = refer('PreferenceAdapter')))
+    ..name = "_\$${element.name}"
+    ..implements.add(refer(element.name))
+    ..constructors.add(
+      injectedConstructor ??
+          Constructor((b) => generateBasicConstructor(b, element.fields)),
+    )
+    ..methods.addAll(element.fields.map<Method>(generateAsyncGetter))
+    ..methods.addAll(element.fields.map<Method>(generateAsyncSetter))
+    ..methods.addAll(element.fields.map<Method>(generateSetter))
+    ..methods.addAll(element.fields.map<Method>(generateGetter));
+}
 
 String setterCodeForField(FieldElement field, {bool private = true}) {
   switch (field.type.displayName) {

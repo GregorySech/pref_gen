@@ -16,20 +16,55 @@ class SharedPreferencesAdapter extends PreferenceAdapter {
   }
 
   @override
-  Future<bool> getBool(key) => getSharedPrefs().then((settings) => settings.getBool(key));
+  Future<bool> getBool(key) async {
+    var prefs = await getSharedPrefs();
+    try {
+      return prefs.getBool(key);
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
-  Future<String> getString(key) => getSharedPrefs().then((settings) => settings.getString(key));
+  Future<String> getString(key) async {
+    var prefs = await getSharedPrefs();
+    try {
+      return prefs.getString(key);
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
-  Future<List<String>> getStringList(key) => getSharedPrefs().then((settings) => settings.getStringList(key));
+  Future<List<String>> getStringList(key) async {
+    var prefs = await getSharedPrefs();
+    try {
+      return prefs.getStringList(key);
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
-  Future<int> getInt(key) => getSharedPrefs().then((settings) => settings.getInt(key));
+  Future<int> getInt(key) async {
+    var prefs = await getSharedPrefs();
+    try {
+      return prefs.getInt(key);
+    } catch (e) {
+      return null;
+    }
+  }
 
   @override
-  Future<double> getDouble(key) => getSharedPrefs().then((settings) => settings.getDouble(key));
-
+  Future<double> getDouble(key) async {
+    var prefs = await getSharedPrefs();
+    try {
+      return prefs.getDouble(key);
+    } catch (e) {
+      return null;
+    }
+  }
+  
   @override
   Future<void> setBool(key, value) => getSharedPrefs().then((settings) => settings.setBool(key, value));
 

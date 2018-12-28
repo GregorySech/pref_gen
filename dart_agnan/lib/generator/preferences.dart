@@ -32,7 +32,7 @@ class SharedPreferenecesGenerator
 String generateAbstractClass(ClassElement element) {
   final generatedClass = ClassBuilder()
     ..abstract = true
-    ..name = "${element.name}Prefences"
+    ..name = "${element.name}Preferences"
     ..methods.addAll(element.fields.map((field) => Method((b) => b
       ..name = "${field.name}Async"
       ..returns = refer("Future<${field.type.displayName}>"))))

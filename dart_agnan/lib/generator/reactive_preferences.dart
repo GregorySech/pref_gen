@@ -28,7 +28,7 @@ class ReactiveSharedPreferencesGenerator
             ..name = "_\$${element.name}"
             ..implements.add(refer(element.name))
             ..constructors.add(
-              (generateBasicConstructor(ConstructorBuilder())
+              (generateBasicConstructor(ConstructorBuilder(), element.fields)
                     ..body = Block((b) => b
                       ..statements.addAll(element.fields.map<Code>((field) => Code(
                           '${field.name}Sink = (StreamController<${field.type.displayName}>.broadcast()'
