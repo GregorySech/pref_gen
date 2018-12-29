@@ -3,59 +3,79 @@
 part of 'shared_settings.dart';
 
 // **************************************************************************
-// SharedPreferenecesGenerator
+// ReactiveSharedPreferencesGenerator
 // **************************************************************************
 
 class _$SharedSettings implements SharedSettings {
   _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter {
-    this._cache["name"] = 'asdasd';
-    this._cache["age"] = 'null';
+    nameSink = (StreamController<String>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setString("name", value);
+            _nameSubject.add(value);
+          }))
+        .sink;
+    ageSink = (StreamController<int>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setInt("age", value);
+            _ageSubject.add(value);
+          }))
+        .sink;
+    tagsSink = (StreamController<List<String>>.broadcast()
+          ..stream.listen((value) async {
+            await adapter.setStringList("tags", value);
+            _tagsSubject.add(value);
+          }))
+        .sink;
+    _adapter.getString("name").then((value) {
+      return value ?? 'asdasd';
+    }).then(nameSink.add);
+    _adapter.getInt("age").then((value) {
+      return value ?? 0;
+    }).then(ageSink.add);
+    _adapter.getStringList("tags").then((value) {
+      return value ?? ['AAA', 'BBB'];
+    }).then(tagsSink.add);
   }
-
-  final Map<String, dynamic> _cache = Map<String, dynamic>();
 
   final PreferenceAdapter _adapter;
 
-  Future<String> nameAsync() {
-    return _adapter.getString("name");
-  }
+  final BehaviorSubject<String> _nameSubject = BehaviorSubject<String>();
 
-  Future<int> ageAsync() {
-    return _adapter.getInt("age");
-  }
+  final BehaviorSubject<int> _ageSubject = BehaviorSubject<int>();
 
-  Future<void> nameAsyncSet(String value) {
-    _cache["name"] = value;
-    return _adapter.setString("name", value);
-  }
+  final BehaviorSubject<List<String>> _tagsSubject =
+      BehaviorSubject<List<String>>();
 
-  Future<void> ageAsyncSet(int value) {
-    _cache["age"] = value;
-    return _adapter.setInt("age", value);
-  }
+  Sink<String> nameSink;
 
-  set name(String value) {
-    _adapter.setString("name", value);
-    _cache["name"] = value;
-  }
+  Sink<int> ageSink;
 
-  set age(int value) {
-    _adapter.setInt("age", value);
-    _cache["age"] = value;
-  }
+  Sink<List<String>> tagsSink;
 
-  String get name {
-    return _cache["name"] as String;
-  }
-
-  int get age {
-    return _cache["age"] as int;
+  Stream<String> get nameStream => _nameSubject.asBroadcastStream();
+  Stream<int> get ageStream => _ageSubject.asBroadcastStream();
+  Stream<List<String>> get tagsStream => _tagsSubject.asBroadcastStream();
+  String get name => _nameSubject.value;
+  int get age => _ageSubject.value;
+  List<String> get tags => _tagsSubject.value;
+  set name(String value) => nameSink.add(value);
+  set age(int value) => ageSink.add(value);
+  set tags(List<String> value) => tagsSink.add(value);
+  void dispose() {
+    nameSink.close();
+    ageSink.close();
+    tagsSink.close();
   }
 }
 
 abstract class SharedSettingsPreferences {
-  Future<String> nameAsync();
-  Future<int> ageAsync();
-  Future<void> nameAsyncSet(String value);
-  Future<void> ageAsyncSet(int value);
+  Sink<String> nameSink;
+
+  Sink<int> ageSink;
+
+  Sink<List<String>> tagsSink;
+
+  Stream<String> get nameStream;
+  Stream<int> get ageStream;
+  Stream<List<String>> get tagsStream;
 }

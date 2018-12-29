@@ -21,9 +21,8 @@ class SharedPreferenecesGenerator
     if (element is ClassElement) {
       final generatedClass = generateClassBuilder(element).build();
       final emitter = DartEmitter();
-      return (DartFormatter().format('${generatedClass.accept(emitter)}')) +
-          "\n" +
-          generateAbstractClass(element);
+      return (DartFormatter().format(
+          '${generatedClass.accept(emitter)} \n${generateAbstractClass(element)}'));
     }
     return "// Annotation found but it's not annotating a class";
   }

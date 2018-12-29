@@ -23,19 +23,20 @@ ConstructorBuilder generateBasicConstructor(
 
     if (annotation != null) {
       var fieldCode =
-          "this._cache[\"${f.name}\"] = '${annotation.getField("value").toStringValue()}';";
+          "this._cache[\"${f.name}\"] = ${getDefaultValue(f, annotation)};";
       return fieldCode;
     }
   }).join('\n');
   return builder
     ..initializers.add(Code("this._adapter = adapter"))
-      ..body = Code(code)
+    ..body = Code(code)
     ..requiredParameters.add(
       Parameter((b) => b
         ..type = refer('PreferenceAdapter')
         ..name = 'adapter'),
     );
 }
+
 String getDefaultValue(FieldElement field, DartObject annotation) {
   var value;
   switch (field.type.displayName) {
@@ -46,10 +47,10 @@ String getDefaultValue(FieldElement field, DartObject annotation) {
       value = annotation.getField("value").toIntValue().toString();
       break;
     case 'String':
-      value = "'" + annotation.getField("value").toStringValue() + "'";
+      value = "'${annotation.getField("value").toStringValue()}'";
       break;
     case 'List<String>':
-      value = annotation.getField("value").toListValue().toString();
+      value = annotation.getField("value").toListValue().map((dob) => "'${dob.toStringValue()}'").toList().toString();
       break;
     case 'double':
       value = annotation.getField("value").toDoubleValue().toString();
@@ -57,6 +58,7 @@ String getDefaultValue(FieldElement field, DartObject annotation) {
   }
   return value;
 }
+
 ClassBuilder generateClassBuilder(ClassElement element,
     {Constructor injectedConstructor}) {
   return ClassBuilder()
@@ -112,18 +114,32 @@ String cacheGetterCodeForField(FieldElement field) {
 }
 
 String asyncGetterCodeForField(FieldElement field, {bool returns = true}) {
+  String code;
   switch (field.type.displayName) {
     case 'bool':
-      return '${returns ? 'return ' : ''}_adapter.getBool("${field.name}")${returns ? ';' : ''}';
+      code = '_adapter.getBool("${field.name}")';
+      break;
     case 'int':
-      return '${returns ? 'return ' : ''}_adapter.getInt("${field.name}")${returns ? ';' : ''}';
-    case 'String':
-      return '${returns ? 'return ' : ''}_adapter.getString("${field.name}")${returns ? ';' : ''}';
+      code = '_adapter.getInt("${field.name}")';
+      break;
     case 'List<String>':
-      return '${returns ? 'return ' : ''}_adapter.getStringList("${field.name}")${returns ? ';' : ''}';
+      code = '_adapter.getStringList("${field.name}")';
+      break;
     case 'double':
-      return '${returns ? 'return ' : ''}_adapter.getDouble("${field.name}")${returns ? ';' : ''}';
+      code = '_adapter.getDouble("${field.name}")';
+      break;
+    case 'String':
+    default:
+      code = '_adapter.getString("${field.name}")';
+      break;
   }
+
+  final annotation = defaultValueAnnotation(field);
+  if (annotation != null) {
+    code = '$code.then((value){ return value ?? ${getDefaultValue(field, annotation)};})';
+  }
+
+  return '${returns ? 'return ' : ''}$code${returns ? ';' : ''}';
 }
 
 Method generateSetter(FieldElement field) {
@@ -154,6 +170,7 @@ Method generateAsyncGetter(FieldElement field) {
 
   return Method((b) => b
     ..name = "${field.name}Async"
+    ..modifier = MethodModifier.async
     ..body = code
     ..returns = refer("Future<${field.type.displayName}>"));
 }
