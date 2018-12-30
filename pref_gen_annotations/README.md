@@ -1,6 +1,6 @@
-# shared_pref_annotation
+# pref_gen_annotations
 
-A new Flutter package.
+pref_gen annotations and platform agnostic interfaces. To use in conjunction with pref_gen as a generator (as dev dependency if you are not shipping your own generator) and pref_gen_flutter as the Flutter's implementation for the shared preferences adapter.
 
 ## Getting Started
 

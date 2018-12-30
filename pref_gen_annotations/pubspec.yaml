@@ -1,12 +1,12 @@
 name: pref_gen_annotations
-description: A new Flutter package.
+description: pref_gen annotations and platform agnostic interfaces. To use in conjunction with pref_gen as a generator.
 version: 0.0.1
-author:
-homepage:
+authors:
+  - Filip Grzywok <rj23@protonmail.com>
+  - Gregory Sech <sech.gregory@gmail.com>
+homepage: https://github.com/GregorySech/pref_gen
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
-dependencies:
-  rxdart: ^0.19.0
 

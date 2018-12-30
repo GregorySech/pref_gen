@@ -2,7 +2,7 @@ import 'dart:async';
 
 /// [PreferenceAdapter] is an abstract wrapper over storage implementations,
 /// Provided in [PreferencesHolder] annotated class's constructor.
-abstract class PreferenceAdapter { 
+abstract class PreferenceAdapter {
   /// Reads an [boolean] from storage implementation
   Future<bool> getBool(String key);
 
