@@ -26,9 +26,11 @@ class _$SharedSettings implements SharedSettings {
 
   final PreferenceAdapter _adapter;
 
-  final BehaviorSubject<int> _counterSubject = BehaviorSubject<int>();
+  final BehaviorSubject<int> _counterSubject =
+      BehaviorSubject<int>(seedValue: null);
 
-  final BehaviorSubject<int> _appbarColorSubject = BehaviorSubject<int>();
+  final BehaviorSubject<int> _appbarColorSubject =
+      BehaviorSubject<int>(seedValue: null);
 
   Sink<int> counterSink;
 
@@ -53,4 +55,8 @@ abstract class SharedSettingsPreferences {
 
   Stream<int> get counterStream;
   Stream<int> get appbarColorStream;
+  void dispose() {
+    counterSink.close();
+    appbarColorSink.close();
+  }
 }

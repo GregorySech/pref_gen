@@ -1,0 +1,23 @@
+targets:
+  $default:
+    builders:
+      pref_gen|pref_gen_annotations:
+        enabled: true
+
+builders:
+  shared_preferences_generator:
+    target: ":pref_gen"
+    import: "package:pref_gen/generator/preferences.dart"
+    builder_factories: ["sharedPreferencesGenerator"]
+    build_extensions: {".dart": [".shared_preferences_generator.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
+  reactive_shared_preferences_generator:
+    target: ":pref_gen"
+    import: "package:pref_gen/generator/reactive_preferences.dart"
+    builder_factories: ["reactiveSharedPreferencesGenerator"]
+    build_extensions: {".dart": [".reactive_shared_preferences_generator.g.part"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]

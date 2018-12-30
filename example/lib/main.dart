@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:athos/athos.dart';
-import 'package:shared_pref_annotation/shared_pref_annotation.dart';
+import 'package:pref_gen_flutter/pref_gen_flutter.dart';
+import 'package:pref_gen_annotations/pref_gen_annotations.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Preferences Generator Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
 @ReactivePreferencesHolder()
 abstract class SharedSettings implements SharedSettingsPreferences {
   int counter;
-
   int appbarColor;
 
   factory SharedSettings(PreferenceAdapter adapter) = _$SharedSettings;

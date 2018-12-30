@@ -11,17 +11,17 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
-  shared_pref_annotation:
-    path: ../shared_pref_annotation
+  pref_gen_annotations:
+    path: ../pref_gen_annotations
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.1.2
-  dart_agnan:
-    path: ../dart_agnan
-  athos:
-    path: ../athos
+  pref_gen:
+    path: ../pref_gen
+  pref_gen_flutter:
+    path: ../pref_gen_flutter
   flutter_colorpicker: ^0.1.0
  
 

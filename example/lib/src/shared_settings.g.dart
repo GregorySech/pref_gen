@@ -39,12 +39,13 @@ class _$SharedSettings implements SharedSettings {
 
   final PreferenceAdapter _adapter;
 
-  final BehaviorSubject<String> _nameSubject = BehaviorSubject<String>();
+  final BehaviorSubject<String> _nameSubject =
+      BehaviorSubject<String>(seedValue: 'asdasd');
 
-  final BehaviorSubject<int> _ageSubject = BehaviorSubject<int>();
+  final BehaviorSubject<int> _ageSubject = BehaviorSubject<int>(seedValue: 0);
 
   final BehaviorSubject<List<String>> _tagsSubject =
-      BehaviorSubject<List<String>>();
+      BehaviorSubject<List<String>>(seedValue: ['AAA', 'BBB']);
 
   Sink<String> nameSink;
 
@@ -78,4 +79,9 @@ abstract class SharedSettingsPreferences {
   Stream<String> get nameStream;
   Stream<int> get ageStream;
   Stream<List<String>> get tagsStream;
+  void dispose() {
+    nameSink.close();
+    ageSink.close();
+    tagsSink.close();
+  }
 }

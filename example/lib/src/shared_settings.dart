@@ -1,4 +1,4 @@
-import 'package:shared_pref_annotation/shared_pref_annotation.dart';
+import 'package:pref_gen_annotations/pref_gen_annotations.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:async';
 part 'shared_settings.g.dart';
