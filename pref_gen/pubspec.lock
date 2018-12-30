@@ -44,7 +44,7 @@ packages:
     source: hosted
     version: "0.2.2+7"
   build_runner:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: build_runner
       url: "https://pub.dartlang.org"
@@ -263,9 +263,9 @@ packages:
   pref_gen_annotations:
     dependency: "direct main"
     description:
-      path: "../pref_gen_annotations"
-      relative: true
-    source: path
+      name: pref_gen_annotations
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "0.0.1"
   pub_semver:
     dependency: transitive
@@ -288,13 +288,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.19.0"
   shelf:
     dependency: transitive
     description:
