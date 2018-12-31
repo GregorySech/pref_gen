@@ -48,7 +48,10 @@ String getDefaultValue(FieldElement field, DartObject annotation) {
       value = "'${annotation.getField("value").toStringValue()}'";
       break;
     case 'List<String>':
-      value = annotation.getField("value").toListValue().map((dob) => "'${dob.toStringValue()}'").toList().toString();
+      value = annotation.getField("value").toListValue()?.map((dob) => "'${dob.toStringValue()}'")?.toList()?.toString();
+      if (value == '[]'){
+        value = '<String>[]';
+      }
       break;
     case 'double':
       value = annotation.getField("value").toDoubleValue().toString();

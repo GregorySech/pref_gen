@@ -10,9 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^0.1.2
-  pref_gen_annotations:
-    path: ../pref_gen_annotations
+  rxdart: ^0.20.0
+  pref_gen_annotations: ^0.0.1
 
 dev_dependencies:
   flutter_test:
