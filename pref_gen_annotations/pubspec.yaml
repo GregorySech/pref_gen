@@ -1,6 +1,6 @@
 name: pref_gen_annotations
 description: pref_gen annotations and platform agnostic interfaces. To use in conjunction with pref_gen as a generator.
-version: 0.0.1
+version: 0.0.2
 authors:
   - Filip Grzywok <rj23@protonmail.com>
   - Gregory Sech <sech.gregory@gmail.com>

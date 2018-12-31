@@ -1,6 +1,6 @@
 name: pref_gen
 description: Generator to create boilerplate for shared preferences based on a provided interface. The generator is platform agnostic README for more details
-version: 0.0.2
+version: 0.0.3
 authors:
   - Filip Grzywok <rj23@protonmail.com>
   - Gregory Sech <sech.gregory@gmail.com>

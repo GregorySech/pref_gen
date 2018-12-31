@@ -1,6 +1,6 @@
 name: pref_gen_flutter
 description: pref_gen's implementation of the shared preferences adapter to use with the generator.
-version: 0.0.1
+version: 0.0.2
 authors:
   - Filip Grzywok <rj23@protonmail.com>
   - Gregory Sech <sech.gregory@gmail.com>
