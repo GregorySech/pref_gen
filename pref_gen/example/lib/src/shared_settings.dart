@@ -13,6 +13,5 @@ abstract class SharedSettings implements SharedSettingsPreferences {
   @DefaultValue(["AAA", "BBB"])
   List<String> tags;
 
-
   factory SharedSettings(PreferenceAdapter adapter) = _$SharedSettings;
 }

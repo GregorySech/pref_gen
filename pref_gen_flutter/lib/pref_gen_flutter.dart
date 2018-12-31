@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesAdapter extends PreferenceAdapter {
   SharedPreferences _sharedPrefs;
-  
+
   Future<SharedPreferences> getSharedPrefs() async {
     if (_sharedPrefs == null) {
       _sharedPrefs = await SharedPreferences.getInstance();
@@ -63,19 +63,24 @@ class SharedPreferencesAdapter extends PreferenceAdapter {
       return null;
     }
   }
-  
-  @override
-  Future<void> setBool(key, value) => getSharedPrefs().then((settings) => settings.setBool(key, value));
 
   @override
-  Future<void> setString(key, value) => getSharedPrefs().then((settings) => settings.setString(key, value));
+  Future<void> setBool(key, value) =>
+      getSharedPrefs().then((settings) => settings.setBool(key, value));
 
   @override
-  Future<void> setStringList(key, value) => getSharedPrefs().then((settings) => settings.setStringList(key, value));
+  Future<void> setString(key, value) =>
+      getSharedPrefs().then((settings) => settings.setString(key, value));
 
   @override
-  Future<void> setInt(key, value) => getSharedPrefs().then((settings) => settings.setInt(key, value));
+  Future<void> setStringList(key, value) =>
+      getSharedPrefs().then((settings) => settings.setStringList(key, value));
 
   @override
-  Future<void> setDouble(key, value) => getSharedPrefs().then((settings) => settings.setDouble(key, value));
+  Future<void> setInt(key, value) =>
+      getSharedPrefs().then((settings) => settings.setInt(key, value));
+
+  @override
+  Future<void> setDouble(key, value) =>
+      getSharedPrefs().then((settings) => settings.setDouble(key, value));
 }

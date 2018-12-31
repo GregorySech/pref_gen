@@ -48,8 +48,13 @@ String getDefaultValue(FieldElement field, DartObject annotation) {
       value = "'${annotation.getField("value").toStringValue()}'";
       break;
     case 'List<String>':
-      value = annotation.getField("value").toListValue()?.map((dob) => "'${dob.toStringValue()}'")?.toList()?.toString();
-      if (value == '[]'){
+      value = annotation
+          .getField("value")
+          .toListValue()
+          ?.map((dob) => "'${dob.toStringValue()}'")
+          ?.toList()
+          ?.toString();
+      if (value == '[]') {
         value = '<String>[]';
       }
       break;
@@ -88,15 +93,21 @@ String setterCodeForField(FieldElement field, {bool private = true}) {
   var code = null;
   switch (field.type.displayName) {
     case 'bool':
-      code =  '${private ? '_' : ''}adapter.setBool("${field.name}", value);'; break;
+      code = '${private ? '_' : ''}adapter.setBool("${field.name}", value);';
+      break;
     case 'int':
-      code =  '${private ? '_' : ''}adapter.setInt("${field.name}", value);'; break;
+      code = '${private ? '_' : ''}adapter.setInt("${field.name}", value);';
+      break;
     case 'String':
-      code =  '${private ? '_' : ''}adapter.setString("${field.name}", value);'; break;
+      code = '${private ? '_' : ''}adapter.setString("${field.name}", value);';
+      break;
     case 'List<String>':
-      code =  '${private ? '_' : ''}adapter.setStringList("${field.name}", value);'; break;
+      code =
+          '${private ? '_' : ''}adapter.setStringList("${field.name}", value);';
+      break;
     case 'double':
-      code =  '${private ? '_' : ''}adapter.setDouble("${field.name}", value);'; break;
+      code = '${private ? '_' : ''}adapter.setDouble("${field.name}", value);';
+      break;
   }
   return code;
 }
@@ -105,15 +116,20 @@ String cacheGetterCodeForField(FieldElement field) {
   var code = null;
   switch (field.type.displayName) {
     case 'bool':
-      code = 'return _cache["${field.name}"] as bool;'; break;
+      code = 'return _cache["${field.name}"] as bool;';
+      break;
     case 'int':
-      code = 'return _cache["${field.name}"] as int;'; break;
+      code = 'return _cache["${field.name}"] as int;';
+      break;
     case 'String':
-      code = 'return _cache["${field.name}"] as String;'; break;
+      code = 'return _cache["${field.name}"] as String;';
+      break;
     case 'List<String>':
-      code = 'return List<String>.from(_cache["${field.name}"] as List);'; break;
+      code = 'return List<String>.from(_cache["${field.name}"] as List);';
+      break;
     case 'double':
-      code = 'return _cache["${field.name}"] as double;'; break;
+      code = 'return _cache["${field.name}"] as double;';
+      break;
   }
   return code;
 }
@@ -141,7 +157,8 @@ String asyncGetterCodeForField(FieldElement field, {bool returns = true}) {
 
   final annotation = defaultValueAnnotation(field);
   if (annotation != null) {
-    code = '$code.then((value){ return value ?? ${getDefaultValue(field, annotation)};})';
+    code =
+        '$code.then((value){ return value ?? ${getDefaultValue(field, annotation)};})';
   }
 
   return '${returns ? 'return ' : ''}$code${returns ? ';' : ''}';
