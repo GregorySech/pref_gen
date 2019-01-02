@@ -17,7 +17,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^1.1.2
-  pref_gen: ^0.0.1
+  pref_gen: 
+    path: ../../pref_gen
   pref_gen_flutter: ^0.0.1
   flutter_colorpicker: ^0.1.0
  

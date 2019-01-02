@@ -6,7 +6,8 @@ part of 'main.dart';
 // ReactiveSharedPreferencesGenerator
 // **************************************************************************
 
-class _$SharedSettings implements SharedSettings {
+class _$SharedSettings extends SharedSettingsPreferences
+    implements SharedSettings {
   _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter {
     counterSink = (StreamController<int>.broadcast()
           ..stream.listen((value) async {
@@ -42,10 +43,6 @@ class _$SharedSettings implements SharedSettings {
   int get appbarColor => _appbarColorSubject.value;
   set counter(int value) => counterSink.add(value);
   set appbarColor(int value) => appbarColorSink.add(value);
-  void dispose() {
-    counterSink.close();
-    appbarColorSink.close();
-  }
 }
 
 abstract class SharedSettingsPreferences {

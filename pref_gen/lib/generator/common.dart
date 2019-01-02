@@ -78,7 +78,8 @@ ClassBuilder generateClassBuilder(ClassElement element,
       ..modifier = FieldModifier.final$
       ..type = refer('PreferenceAdapter')))
     ..name = "_\$${element.name}"
-    ..implements.add(refer(element.name))
+    ..implements.add(refer("${element.name}"))
+    ..extend = refer('${element.name}Preferences')
     ..constructors.add(
       injectedConstructor ??
           Constructor((b) => generateBasicConstructor(b, element.fields)),

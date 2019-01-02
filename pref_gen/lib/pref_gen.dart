@@ -1,3 +1,3 @@
-library dart_agnan;
+library pref_gen;
 
 export 'generator/generator.dart';

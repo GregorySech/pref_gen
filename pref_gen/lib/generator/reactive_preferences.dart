@@ -27,6 +27,7 @@ class ReactiveSharedPreferencesGenerator
               ..type = refer('PreferenceAdapter')))
             ..name = "_\$${element.name}"
             ..implements.add(refer(element.name))
+            ..extend = refer('${element.name}Preferences')
             ..constructors.add(
               (generateBasicConstructor(ConstructorBuilder(), element.fields)
                     ..body = Block((b) => b
@@ -46,11 +47,7 @@ class ReactiveSharedPreferencesGenerator
             ..fields.addAll(element.fields.map<Field>(_generateSink))
             ..methods.addAll(element.fields.map(_generateStreamGetter))
             ..methods.addAll(element.fields.map(_generateFieldGetter))
-            ..methods.addAll(element.fields.map(_generateFieldSetter))
-            ..methods.add(Method.returnsVoid((m) => m
-              ..name = 'dispose'
-              ..body = Block.of(element.fields
-                  .map((field) => Code('${field.name}Sink.close();'))))))
+            ..methods.addAll(element.fields.map(_generateFieldSetter)))
           .build();
       final emitter = DartEmitter();
       return (DartFormatter().format('${generatedClass.accept(emitter)}') +

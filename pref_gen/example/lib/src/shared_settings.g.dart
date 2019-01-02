@@ -6,7 +6,8 @@ part of 'shared_settings.dart';
 // ReactiveSharedPreferencesGenerator
 // **************************************************************************
 
-class _$SharedSettings implements SharedSettings {
+class _$SharedSettings extends SharedSettingsPreferences
+    implements SharedSettings {
   _$SharedSettings(PreferenceAdapter adapter) : this._adapter = adapter {
     nameSink = (StreamController<String>.broadcast()
           ..stream.listen((value) async {
@@ -62,11 +63,6 @@ class _$SharedSettings implements SharedSettings {
   set name(String value) => nameSink.add(value);
   set age(int value) => ageSink.add(value);
   set tags(List<String> value) => tagsSink.add(value);
-  void dispose() {
-    nameSink.close();
-    ageSink.close();
-    tagsSink.close();
-  }
 }
 
 abstract class SharedSettingsPreferences {
